@@ -88,7 +88,7 @@ def inc_transactions():
     return metadata
 
 @app.route("/transactions/daily/", methods=['GET'])
-def inc_transactions():
+def daily_transactions():
     logger.info("Process Transactions Incremental Started")
 
     start_date = (datetime.now() - timedelta(days=1)).strftime('%Y-%m-%d')
