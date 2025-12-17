@@ -74,6 +74,11 @@ def hello_world():
     return "The App is up"
 
 if __name__ == "__main__":
-    # Pega a porta do ambiente ou usa 8080 como padrão
-    port = int(os.environ.get("PORT", 8080))
-    app.run(debug=True, host="0.0.0.0", port=port)
+    try:
+        # Pega a porta do ambiente ou usa 8080 como padrão
+        port = int(os.environ.get("PORT", 8080))
+        logger.info(f"Tentando iniciar na porta {port}")
+        app.run(debug=True, host="0.0.0.0", port=port)
+    except Exception as e:
+        logger.critical(f"ERRO FATAL AO INICIAR O APP: {e}")
+        raise e
