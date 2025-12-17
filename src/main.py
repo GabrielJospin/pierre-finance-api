@@ -6,6 +6,7 @@ import logging
 from flask import Flask, request
 import json
 from api_connector import *
+from storage_controller import *
 
 ### CONFIG LOGS
 logger = logging.getLogger(__name__)
@@ -35,9 +36,14 @@ app = Flask(__name__)
 @app.route("/accounts/full/", methods=['GET'])
 def full_accounts():
     logger.info("Process Account Full Started")
+    
     data, metadata = get_accounts()
     logger.info("Get Requests", json.dumps(metadata, indent=4))
-    return data
+    
+    df = pd.DataFrame(data)
+    salver_gcs(df, "accounts_full.csv", path="accounts/")
+    
+    return metadata
 
 @app.route("/transactions/full/", methods=['GET'])
 def full_transactions():
