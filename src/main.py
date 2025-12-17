@@ -41,9 +41,10 @@ def full_accounts():
     logger.info("Get Requests", json.dumps(metadata, indent=4))
     
     df = pd.DataFrame(data)
-    salver_gcs(df, "accounts_full.csv", path="accounts/")
+    salvar_gcs(df, "accounts_full.csv", path="accounts/")
+    salvar_bigquery(df, "pierre_api_accounts", write_type="replace")
     
-    return metadata
+    return metadata 
 
 @app.route("/transactions/full/", methods=['GET'])
 def full_transactions():
