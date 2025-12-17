@@ -4,6 +4,9 @@ FROM python:3.10-slim
 # 2. Define o diretório de trabalho dentro do container
 WORKDIR /app
 
+# 3. Copia o requirements da pasta src para dentro do container
+COPY src/requirements.txt .
+
 # 4. Instala as dependências
 RUN pip install --no-cache-dir -r requirements.txt
 
