@@ -3,7 +3,7 @@ import sys
 import requests
 import pandas as pd
 import logging
-from datetime import datetime
+from datetime import datetime, timedelta
 from flask import Flask, request
 import json
 from api_connector import *
