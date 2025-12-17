@@ -1,4 +1,4 @@
-from google.cloud import storage
+from google.cloud import storage, bigquery
 import pandas as pd
 from datetime import datetime
 import os
