@@ -16,6 +16,6 @@ def salver_gcs(df, file_name, path=""):
     df["ingestion_time"] = datetime.now()
     df_csv = df.to_csv(index=False)
 
-    blob.uplod_from_string(df_csv, content_type='text/csv')
+    blob.upload_from_string(df_csv, content_type='text/csv')
     
     return True
