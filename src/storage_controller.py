@@ -1,6 +1,8 @@
 from google.cloud import storage, bigquery
 import pandas as pd
 from datetime import datetime
+import logging # Faltava importar
+import sys     # Faltava importar
 import os
 
 BUCKET_NAME = os.environ.get('GCS_BUCKET_NAME', 'jospin-pierre-api-stg')
@@ -11,19 +13,14 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 c_handler = logging.StreamHandler(sys.stdout) 
-f_handler = logging.FileHandler('erros.log')  
 
 c_handler.setLevel(logging.INFO)  
-f_handler.setLevel(logging.ERROR)
 
 c_format = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
-f_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 c_handler.setFormatter(c_format)
-f_handler.setFormatter(f_format)
 
 logger.addHandler(c_handler)
-logger.addHandler(f_handler)
 
 def salvar_gcs(df, file_name, path=""):
 
@@ -68,4 +65,4 @@ def salvar_bigquery(df, table_name, write_type='append'):
 
     logger.info(f"Carregado {job.output_rows} linhas. Total na tabela: {table.num_rows}")
 
-    return true
+    return True
