@@ -34,6 +34,9 @@ def full_accounts():
     
     data, metadata = get_accounts()
     logger.info("Get Requests", json.dumps(metadata, indent=4))
+
+    if len(data) != metadata["count"]:
+        raise ValueError("Missing Data in request")
     
     df = pd.DataFrame(data)
     salvar_gcs(df, "accounts_full.csv", path="accounts/")
@@ -44,9 +47,18 @@ def full_accounts():
 @app.route("/transactions/full/", methods=['GET'])
 def full_transactions():
     logger.info("Process Transactions Full Started")
+
     data, metadata = get_transactions()
     logger.info("Get Requests", json.dumps(metadata, indent=4))
-    return data
+    
+    if len(data) != metadata["count"]:
+        raise ValueError("Missing Data in request")
+    
+    df = pd.DataFrame(data)
+    salvar_gcs(df, "transactions_full.csv", path="transactions/")
+    salvar_bigquery(df, "pierre_api_transactions", write_type="replace")
+
+    return metadata
 
 @app.route("/transactions/incremental/", methods=['GET'])
 def inc_transactions():
@@ -59,6 +71,7 @@ def inc_transactions():
         "startDate":start_date,
         "endDate":end_date
     }
+
     logger.info("Filters:", json.dumps(filters, indent=4))
 
     data, metadata = get_transactions(filters=filters)
@@ -67,7 +80,11 @@ def inc_transactions():
     if len(data) != metadata["count"]:
         raise ValueError("Missing Data in request")
     
-    return data
+    df = pd.DataFrame(data)
+    salvar_gcs(df, f"transactions_inc_{start_date}_to_{end_date}.csv", path="transactions/inc/")
+    salvar_bigquery(df, "pierre_api_transactions", write_type="append")
+
+    return metadata
 
 @app.route("/")
 def hello_world():
